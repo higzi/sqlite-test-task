@@ -1,0 +1,5 @@
+build_linux/
+build_docker/
+*.o
+*.so
+*.dll

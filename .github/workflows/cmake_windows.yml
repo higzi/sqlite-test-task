@@ -1,0 +1,30 @@
+name: Build SQLite Windows MSVC
+
+on: [push]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create Build Environment
+      run: cmake -E make_directory build
+
+    - name: Configure CMake
+      # Используем генератор Visual Studio (MSVC)
+      shell: bash
+      working-directory: build
+      run: cmake -G "Visual Studio 17 2022" -A x64 ..
+
+    - name: Build
+      working-directory: build
+      # Сохраняем вывод в файл build_log_windows.txt
+      run: cmake --build . --config Release > ../build_log_windows.txt 2>&1
+
+    - name: Upload Log
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-log
+        path: build_log_windows.txt
